@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOLCANNO | สมัครสมาชิก</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="config.js"></script>
+    <script src="api.js"></script>
+    <script src="auth.js"></script>
+    <style>
+        .hidden { display: none !important; }
+        .acc-wrap { max-width: 880px; margin: 0 auto; padding: 50px 5% 80px; }
+        .acc-card { background: #fff; border: 1px solid #E8E2D6; border-radius: 20px; padding: 36px 38px; box-shadow: 0 10px 30px rgba(90,62,43,.04); margin-bottom: 26px; }
+        .acc-card.narrow { max-width: 480px; margin-left: auto; margin-right: auto; }
+        .acc-card h2 { font-size: 22px; font-weight: 600; color: #2B2D42; text-align: center; margin-bottom: 6px; }
+        .acc-card .sub { text-align: center; color: #888; font-size: 14px; margin-bottom: 24px; }
+        .acc-card h3 { font-size: 17px; font-weight: 600; color: #2B2D42; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .acc-card h3 i { color: #9B2226; }
+        .fld { margin-bottom: 16px; }
+        .fld label { display: block; font-size: 14px; font-weight: 500; color: #2B2D42; margin-bottom: 7px; }
+        .fld input { width: 100%; padding: 13px 17px; border: 1px solid #E8E2D6; border-radius: 12px; font-size: 15px; outline: none; background: #fff; color: #2B2D42; font-family: inherit; transition: border-color .3s; }
+        .fld input:focus { border-color: #9B2226; }
+        .fld .opt { color: #aaa; font-weight: 400; }
+        .btn-main { width: 100%; padding: 14px; background: #9B2226; color: #fff; border: none; border-radius: 30px; font-size: 16px; font-weight: 500; cursor: pointer; font-family: inherit; transition: background .3s; }
+        .btn-main:hover { background: #7A1B1E; }
+        .btn-main:disabled { opacity: .55; cursor: not-allowed; }
+        .btn-line { background: #fff; color: #5A3E2B; border: 1px solid #E8E2D6; padding: 8px 20px; border-radius: 30px; cursor: pointer; font-size: 14px; font-family: inherit; }
+        .btn-line:hover { background: #FCF9F2; }
+        .msg { display: none; padding: 11px 15px; border-radius: 12px; font-size: 14px; margin-bottom: 16px; }
+        .msg.err { background: #FDF0ED; border: 1px solid #F5D0C9; color: #9B2226; }
+        .msg.ok { background: #E8F5EC; border: 1px solid #BFE3CB; color: #217a45; }
+        .switch { text-align: center; margin-top: 18px; font-size: 14px; color: #777; }
+        .switch a { color: #9B2226; font-weight: 500; text-decoration: none; }
+        .who { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+        .who .avatar { width: 58px; height: 58px; border-radius: 50%; background: #FDF0ED; color: #9B2226; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 600; flex: none; }
+        .who .meta { flex: 1; min-width: 180px; }
+        .who .meta b { font-size: 18px; display: block; }
+        .who .meta span { color: #888; font-size: 14px; display: block; }
+        .o-card { border: 1px solid #F0EAE1; border-radius: 16px; padding: 18px 20px; margin-bottom: 14px; background: #FFFEFC; }
+        .o-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+        .o-id { font-weight: 600; color: #9B2226; font-size: 16px; }
+        .o-date { color: #999; font-size: 13px; }
+        .o-badge { padding: 3px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; border: 1px solid transparent; }
+        .s-0 { background: #FFF4D6; color: #8a6200; border-color: #F3DFA5; }
+        .s-1 { background: #E3F0FF; color: #1c5aa6; border-color: #BCD8F7; }
+        .s-2 { background: #EFE6FF; color: #5b3ea0; border-color: #D5C4F5; }
+        .s-3 { background: #E5F5EA; color: #217a45; border-color: #BFE3CB; }
+        .s-x { background: #FDE9E7; color: #9B2226; border-color: #F5C6C1; }
+        .s-n { background: #EEE; color: #666; }
+        .o-items { font-size: 14px; color: #555; line-height: 1.8; }
+        .o-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 14px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #EDE6D9; font-size: 13px; color: #888; }
+        .o-foot b { color: #9B2226; font-size: 18px; white-space: nowrap; }
+        .state { text-align: center; padding: 34px 10px; color: #888; }
+        .state i { font-size: 28px; color: #D9CDB8; display: block; margin-bottom: 10px; }
+        .state a, .state button { display: inline-block; margin-top: 12px; background: #9B2226; color: #fff; text-decoration: none; padding: 9px 26px; border-radius: 30px; font-size: 14px; border: none; cursor: pointer; font-family: inherit; }
+        .row-h { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 16px; }
+        .row-h h3 { margin: 0; }
+        .track-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; }
+        .track-row .fld { margin: 0; }
+        .track-row .btn-main { width: auto; padding: 13px 26px; }
+        @media (max-width: 640px) {
+            .acc-card { padding: 26px 22px; }
+            .track-row { grid-template-columns: 1fr; }
+            .track-row .btn-main { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- แถบเมนูด้านบน (Navbar) -->
+    <nav class="navbar" style="background: #FCF9F2; border-bottom: 1px solid #E8E2D6; position: relative;">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <img src="VOCANNO Seafood Skewer Logo.png" alt="VOLCANNO Logo">
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">หน้าแรก</a></li>
+                <li><a href="products.html">สินค้า</a></li>
+                <li><a href="how-to-use.html">วิธีใช้งาน</a></li>
+                <li><a href="about-us.html">เกี่ยวกับเรา</a></li>
+                <li><a href="contact.html">ติดต่อ</a></li>
+            </ul>
+
+            <div class="nav-icons">
+                <a href="profile.html" class="icon-circle" style="color: #5A3E2B; border-color: #E5D9C5;"><i class="fa-regular fa-user"></i></a>
+                <a href="order.html" class="icon-circle" style="color: #5A3E2B; border-color: #E5D9C5;"><i class="fa-solid fa-cart-shopping"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <section>
+        <div class="acc-wrap">
+            <form class="acc-card narrow" id="regForm" novalidate>
+                <h2>สมัครสมาชิก</h2>
+                <p class="sub">สมัครฟรี เพื่อกรอกที่อยู่อัตโนมัติและดูประวัติการสั่งซื้อ</p>
+                <div class="msg err" id="regErr"></div>
+                <div class="fld"><label for="rName">ชื่อ-นามสกุล</label>
+                    <input id="rName" type="text" maxlength="100" autocomplete="name" placeholder="ชื่อ นามสกุล"></div>
+                <div class="fld"><label for="rPhone">เบอร์โทรศัพท์</label>
+                    <input id="rPhone" type="tel" maxlength="12" autocomplete="tel" placeholder="เช่น 0812345678"></div>
+                <div class="fld"><label for="rEmail">อีเมล <span class="opt">(ไม่บังคับ)</span></label>
+                    <input id="rEmail" type="email" maxlength="100" autocomplete="email" placeholder="you@example.com"></div>
+                <div class="fld"><label for="rPw">รหัสผ่าน</label>
+                    <input id="rPw" type="password" autocomplete="new-password" placeholder="อย่างน้อย 6 ตัวอักษร"></div>
+                <div class="fld"><label for="rPw2">ยืนยันรหัสผ่าน</label>
+                    <input id="rPw2" type="password" autocomplete="new-password" placeholder="กรอกรหัสผ่านอีกครั้ง"></div>
+                <button type="submit" class="btn-main" id="regBtn">สมัครสมาชิก</button>
+                <div class="switch">มีบัญชีอยู่แล้ว? <a href="profile.html">เข้าสู่ระบบ</a></div>
+            </form>
+        </div>
+    </section>
+
+    <!-- สไตล์เพิ่มเติมสำหรับปุ่มกดสินค้า -->
+    <style>
+        .btn-add-cart:hover {
+            background-color: #9B2226 !important;
+            color: #FFFFFF !important;
+        }
+        .btn-buy-now:hover {
+            background-color: #7A1B1E !important;
+            border-color: #7A1B1E !important;
+        }
+    </style>
+<style>
+    /* เพิ่มแถบพื้นหลัง Navbar ให้ทึบขึ้นเล็กน้อยเพื่อแยกตัวหนังสือออกจากภาพด้านหลังโดยไม่ต้องใช้เงา */
+    .navbar {
+        background-color: #FCF9F2 !important; 
+        border-bottom: 1px solid #E8E2D6;
+    }
+
+    /* ตัวหนังสือสีน้ำตาลเข้ม โดดเด่น ชัดเจน */
+    .nav-links a {
+        color: #5A3E2B !important;
+        font-weight: 500;
+        text-shadow: none !important; /* ป้องกันไม่ให้มีเงาติดมาแน่นอน */
+    }
+
+    /* เมื่อเอาเมาส์ชี้หรืออยู่หน้าปัจจุบัน ให้เป็นสีแดงแบรนด์ */
+    .nav-links a:hover, .nav-links a.active {
+        color: #9B2226 !important;
+    }
+
+    /* สีไอคอนด้านขวาให้เป็นสีน้ำตาลเข้ากัน */
+    .nav-icons .icon-circle {
+        color: #5A3E2B !important;
+        border-color: #E5D9C5 !important;
+    }
+</style>
+    <!-- ฟุตเตอร์เว็บไซต์ -->
+    <style>
+    .site-footer {
+        background-color: #9B2226; /* สีแดงเข้มเข้ากับธีมเว็บไซต์ */
+        color: #FFFFFF;
+        padding: 80px 6% 30px 6%;
+        font-family: 'Prompt', sans-serif;
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        box-sizing: border-box;
+        margin-top: 100px;
+        border-top: 1px solid #B23A3E;
+    }
+    .footer-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 2fr;
+        gap: 50px;
+        padding-bottom: 50px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .footer-col h3 {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        letter-spacing: 0.5px;
+        color: #FFD166; /* ใช้สีเหลืองทองอ่อนสำหรับหัวข้อ เพื่อให้ดูพรีเมียมและตัดกับพื้นหลังแดง */
+    }
+    .footer-col p {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #FFFFFF; /* ตัวหนังสือสีขาวชัดเจน */
+        margin-bottom: 20px;
+    }
+    .footer-col ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .footer-col ul li {
+        margin-bottom: 12px;
+    }
+    .footer-col ul li a {
+        color: #FFFFFF; /* ลิงก์เมนูสีขาว */
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.3s;
+    }
+    .footer-col ul li a:hover {
+        color: #FFD166; /* เมื่อชี้เมาส์เปลี่ยนเป็นสีเหลืองทอง */
+    }
+    /* ไอคอนโซเชียลมีเดีย */
+    .social-icons {
+        display: flex;
+        gap: 12px;
+    }
+    .social-icon {
+        width: 38px;
+        height: 38px;
+        border: 1px solid #FFFFFF;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #FFFFFF;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+    .social-icon:hover {
+        background: #FFFFFF;
+        color: #9B2226;
+    }
+    /* ฟอร์มรับข่าวสาร */
+    .newsletter-form {
+        display: flex;
+        align-items: center;
+        background: #FFFFFF;
+        border: 1px solid #FFFFFF;
+        border-radius: 30px;
+        padding: 5px;
+        max-width: 320px;
+    }
+    .newsletter-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        padding: 10px 15px;
+        border-radius: 30px;
+        font-size: 14px;
+        color: #333333;
+        background: transparent;
+    }
+    .newsletter-btn {
+        background-color: #9B2226;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #FFFFFF;
+        transition: background 0.3s;
+    }
+    .newsletter-btn:hover {
+        background-color: #7A1B1E;
+    }
+    /* ส่วนลิขสิทธิ์ด้านล่างสุด */
+    .footer-bottom {
+        max-width: 1400px;
+        margin: 25px auto 0 auto;
+        text-align: center;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Responsive สำหรับมือถือ */
+    @media (max-width: 768px) {
+        .footer-container {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+    }
+</style>
+
+<footer class="site-footer">
+    <div class="footer-container">
+        <!-- คอลัมน์ที่ 1: ข้อมูลแบรนด์และโซเชียล -->
+        <div class="footer-col">
+            <!-- เปลี่ยนจากข้อความ VOLCANO เป็นรูปโลโก้ (สามารถเปลี่ยนชื่อไฟล์รูปภาพ VOCANNO Seafood Skewer Logo.png ตามที่คุณใช้งานจริงได้เลยครับ) -->
+    <div style="margin-bottom: 15px;">
+        <a href="index.html">
+            <img src="VOCANNO Seafood Skewer Logo.png" alt="VOLCANNO Logo" style="max-width: 140px; height: auto; display: block;">
+        </a>
+    </div>
+            <p>ประทุความจัดจ้านของคางดำ อร่อย เด็ด รักษ์โลก</p>
+            <div class="social-icons">
+                <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#" class="social-icon"><i class="fa-solid fa-comment"></i></a>
+            </div>
+        </div>
+
+        <!-- คอลัมน์ที่ 2: เมนู -->
+        <div class="footer-col">
+            <h3>เมนู</h3>
+            <ul>
+                <li><a href="index.html">หน้าแรก</a></li>
+                <li><a href="products.html">สินค้า</a></li>
+                <li><a href="how-to-use.html">วิธีใช้งาน</a></li>
+            </ul>
+        </div>
+
+        <!-- คอลัมน์ที่ 3: เกี่ยวกับเรา -->
+        <div class="footer-col">
+            <h3>เกี่ยวกับเรา</h3>
+            <ul>
+                <li><a href="about-us.html">เกี่ยวกับเรา</a></li>
+            </ul>
+        </div>
+
+        <!-- คอลัมน์ที่ 4: ติดต่อ & Newsletter -->
+        <div class="footer-col">
+            <h3>ติดต่อ</h3>
+            <p>โทร. 02-123-4567<br>อีเมล info@volcano.com<br>LINE @volcano</p>
+            </div>
+        </div>
+    </div>
+
+    
+</footer>
+<script>
+
+(function () {
+    var $ = function (id) { return document.getElementById(id); };
+    if (Auth.getUser()) { location.replace('profile.html'); return; }
+
+    function fail(m) { var e = $('regErr'); e.textContent = m; e.style.display = 'block'; }
+
+    $('regForm').addEventListener('submit', async function (ev) {
+        ev.preventDefault();
+        $('regErr').style.display = 'none';
+        var name = $('rName').value.trim();
+        var phone = $('rPhone').value.replace(/[\s-]/g, '');
+        var email = $('rEmail').value.trim();
+        var pw = $('rPw').value, pw2 = $('rPw2').value;
+
+        if (!name) return fail('กรุณากรอกชื่อ-นามสกุล');
+        if (!/^0\d{8,9}$/.test(phone)) return fail('เบอร์โทรไม่ถูกต้อง (เช่น 0812345678)');
+        if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return fail('รูปแบบอีเมลไม่ถูกต้อง');
+        if (pw.length < 6) return fail('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร');
+        if (pw !== pw2) return fail('รหัสผ่านทั้งสองช่องไม่ตรงกัน');
+
+        var btn = $('regBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังสมัคร...';
+        try {
+            await Auth.register({ name: name, phone: phone, email: email, password: pw });
+            location.href = 'profile.html';
+        } catch (e) {
+            fail(e.message);
+            btn.disabled = false;
+            btn.textContent = 'สมัครสมาชิก';
+        }
+    });
+})();
+
+</script>
+</body>
+</html>

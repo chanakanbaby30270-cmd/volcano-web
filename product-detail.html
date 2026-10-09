@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOLCANNO | รายละเอียดสินค้า</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .product-info p {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .state-box { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #666; }
+        .state-box i { font-size: 28px; color: #9B2226; margin-bottom: 12px; display: block; }
+        .state-box button { margin-top: 14px; background: #9B2226; color: #fff; border: none; padding: 10px 26px; border-radius: 30px; cursor: pointer; font-family: inherit; font-size: 14px; }
+        .qty-box { display: flex; align-items: center; border: 1px solid #E8E2D6; border-radius: 30px; overflow: hidden; background: #FCF9F2; }
+        .qty-box button { background: transparent; border: none; width: 40px; height: 40px; cursor: pointer; font-size: 16px; color: #5A3E2B; transition: background .2s; }
+        .qty-box button:hover { background: #E8E2D6; }
+        .qty-box input { width: 50px; text-align: center; border: none; background: transparent; font-size: 16px; font-weight: 600; color: #2B2D42; outline: none; font-family: inherit; }
+        .btn-add-cart, .btn-buy-now { cursor: pointer; font-family: inherit; }
+        .btn-disabled { opacity: .5; pointer-events: none; }
+        .stock-note { font-size: 12px; color: #9B2226; }
+    </style>
+    <script src="config.js"></script>
+    <script src="api.js"></script>
+    <script src="cart.js"></script>
+</head>
+<body>
+
+    <!-- แถบเมนูด้านบน (Navbar) -->
+    <nav class="navbar" style="background: #FCF9F2; border-bottom: 1px solid #E8E2D6; position: relative;">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <img src="VOCANNO Seafood Skewer Logo.png" alt="VOLCANNO Logo">
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">หน้าแรก</a></li>
+                <li><a href="products.html" class="active">สินค้า</a></li>
+                <li><a href="how-to-use.html">วิธีใช้งาน</a></li>
+                <li><a href="about-us.html">เกี่ยวกับเรา</a></li>
+                <li><a href="contact.html">ติดต่อ</a></li>
+            </ul>
+
+            <div class="nav-icons">
+                <a href="profile.html" class="icon-circle" style="color: #5A3E2B; border-color: #E5D9C5;"><i class="fa-regular fa-user"></i></a>
+                <a href="order.html" class="icon-circle" style="color: #5A3E2B; border-color: #E5D9C5;"><i class="fa-solid fa-cart-shopping"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="products-section" style="padding: 40px 0 60px;">
+        <div class="main-container">
+            <div style="margin-bottom: 25px;">
+                <a href="products.html" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: #5A3E2B; font-weight: 500; font-size: 15px; background: #fff; padding: 8px 18px; border-radius: 20px; border: 1px solid #E8E2D6;">
+                    <i class="fa-solid fa-arrow-left"></i> ย้อนกลับไปหน้าสินค้า
+                </a>
+            </div>
+            <div id="productDetail">
+                <div class="state-box"><i class="fa-solid fa-spinner fa-spin"></i>กำลังโหลดสินค้า...</div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .detail-card { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; background: #fff; padding: 40px; border-radius: 24px; border: 1px solid #E8E2D6; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
+        .detail-card img.detail-img { width: 100%; height: 400px; object-fit: cover; border-radius: 16px; border: 1px solid #F0ECE1; }
+        @media (max-width: 800px) {
+            .detail-card { grid-template-columns: 1fr; gap: 25px; padding: 22px; }
+            .detail-card img.detail-img { height: 300px; }
+        }
+    </style>
+
+    <!-- สไตล์เพิ่มเติมสำหรับปุ่มกดสินค้า -->
+    <style>
+        .btn-add-cart:hover {
+            background-color: #9B2226 !important;
+            color: #FFFFFF !important;
+        }
+        .btn-buy-now:hover {
+            background-color: #7A1B1E !important;
+            border-color: #7A1B1E !important;
+        }
+    </style>
+<style>
+    /* เพิ่มแถบพื้นหลัง Navbar ให้ทึบขึ้นเล็กน้อยเพื่อแยกตัวหนังสือออกจากภาพด้านหลังโดยไม่ต้องใช้เงา */
+    .navbar {
+        background-color: #FCF9F2 !important; 
+        border-bottom: 1px solid #E8E2D6;
+    }
+
+    /* ตัวหนังสือสีน้ำตาลเข้ม โดดเด่น ชัดเจน */
+    .nav-links a {
+        color: #5A3E2B !important;
+        font-weight: 500;
+        text-shadow: none !important; /* ป้องกันไม่ให้มีเงาติดมาแน่นอน */
+    }
+
+    /* เมื่อเอาเมาส์ชี้หรืออยู่หน้าปัจจุบัน ให้เป็นสีแดงแบรนด์ */
+    .nav-links a:hover, .nav-links a.active {
+        color: #9B2226 !important;
+    }
+
+    /* สีไอคอนด้านขวาให้เป็นสีน้ำตาลเข้ากัน */
+    .nav-icons .icon-circle {
+        color: #5A3E2B !important;
+        border-color: #E5D9C5 !important;
+    }
+</style>
+    <!-- ฟุตเตอร์เว็บไซต์ -->
+    <style>
+    .site-footer {
+        background-color: #9B2226; /* สีแดงเข้มเข้ากับธีมเว็บไซต์ */
+        color: #FFFFFF;
+        padding: 80px 6% 30px 6%;
+        font-family: 'Prompt', sans-serif;
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        box-sizing: border-box;
+        margin-top: 100px;
+        border-top: 1px solid #B23A3E;
+    }
+    .footer-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 2fr;
+        gap: 50px;
+        padding-bottom: 50px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .footer-col h3 {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        letter-spacing: 0.5px;
+        color: #FFD166; /* ใช้สีเหลืองทองอ่อนสำหรับหัวข้อ เพื่อให้ดูพรีเมียมและตัดกับพื้นหลังแดง */
+    }
+    .footer-col p {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #FFFFFF; /* ตัวหนังสือสีขาวชัดเจน */
+        margin-bottom: 20px;
+    }
+    .footer-col ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .footer-col ul li {
+        margin-bottom: 12px;
+    }
+    .footer-col ul li a {
+        color: #FFFFFF; /* ลิงก์เมนูสีขาว */
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.3s;
+    }
+    .footer-col ul li a:hover {
+        color: #FFD166; /* เมื่อชี้เมาส์เปลี่ยนเป็นสีเหลืองทอง */
+    }
+    /* ไอคอนโซเชียลมีเดีย */
+    .social-icons {
+        display: flex;
+        gap: 12px;
+    }
+    .social-icon {
+        width: 38px;
+        height: 38px;
+        border: 1px solid #FFFFFF;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #FFFFFF;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+    .social-icon:hover {
+        background: #FFFFFF;
+        color: #9B2226;
+    }
+    /* ฟอร์มรับข่าวสาร */
+    .newsletter-form {
+        display: flex;
+        align-items: center;
+        background: #FFFFFF;
+        border: 1px solid #FFFFFF;
+        border-radius: 30px;
+        padding: 5px;
+        max-width: 320px;
+    }
+    .newsletter-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        padding: 10px 15px;
+        border-radius: 30px;
+        font-size: 14px;
+        color: #333333;
+        background: transparent;
+    }
+    .newsletter-btn {
+        background-color: #9B2226;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #FFFFFF;
+        transition: background 0.3s;
+    }
+    .newsletter-btn:hover {
+        background-color: #7A1B1E;
+    }
+    /* ส่วนลิขสิทธิ์ด้านล่างสุด */
+    .footer-bottom {
+        max-width: 1400px;
+        margin: 25px auto 0 auto;
+        text-align: center;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Responsive สำหรับมือถือ */
+    @media (max-width: 768px) {
+        .footer-container {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+    }
+</style>
+
+<footer class="site-footer">
+    <div class="footer-container">
+        <!-- คอลัมน์ที่ 1: ข้อมูลแบรนด์และโซเชียล -->
+        <div class="footer-col">
+            <!-- เปลี่ยนจากข้อความ VOLCANO เป็นรูปโลโก้ (สามารถเปลี่ยนชื่อไฟล์รูปภาพ VOCANNO Seafood Skewer Logo.png ตามที่คุณใช้งานจริงได้เลยครับ) -->
+    <div style="margin-bottom: 15px;">
+        <a href="index.html">
+            <img src="VOCANNO Seafood Skewer Logo.png" alt="VOLCANNO Logo" style="max-width: 140px; height: auto; display: block;">
+        </a>
+    </div>
+            <p>ประทุความจัดจ้านของคางดำ อร่อย เด็ด รักษ์โลก</p>
+            <div class="social-icons">
+                <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#" class="social-icon"><i class="fa-solid fa-comment"></i></a>
+            </div>
+        </div>
+
+        <!-- คอลัมน์ที่ 2: เมนู -->
+        <div class="footer-col">
+            <h3>เมนู</h3>
+            <ul>
+                <li><a href="index.html">หน้าแรก</a></li>
+                <li><a href="products.html">สินค้า</a></li>
+                <li><a href="how-to-use.html">วิธีใช้งาน</a></li>
+            </ul>
+        </div>
+
+        <!-- คอลัมน์ที่ 3: เกี่ยวกับเรา -->
+        <div class="footer-col">
+            <h3>เกี่ยวกับเรา</h3>
+            <ul>
+                <li><a href="about-us.html">เกี่ยวกับเรา</a></li>
+            </ul>
+        </div>
+
+        <!-- คอลัมน์ที่ 4: ติดต่อ & Newsletter -->
+        <div class="footer-col">
+            <h3>ติดต่อ</h3>
+            <p>โทร. 02-123-4567<br>อีเมล info@volcano.com<br>LINE @volcano</p>
+            </div>
+        </div>
+    </div>
+
+    
+</footer>
+
+<script>
+(function () {
+    var box = document.getElementById('productDetail');
+    var id = new URLSearchParams(location.search).get('id');
+
+    function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    }
+
+    function message(icon, text, withRetry) {
+        box.innerHTML = '<div class="state-box"><i class="fa-solid ' + icon + '"></i>' + esc(text) +
+            (withRetry ? '<br><button type="button" id="retryBtn">ลองใหม่</button>' : '') + '</div>';
+        if (withRetry) document.getElementById('retryBtn').addEventListener('click', load);
+    }
+
+    function render(p) {
+        document.title = 'VOLCANNO | ' + p.name;
+        var soldOut = p.stock < 1;
+        var check = function (t) {
+            return '<div><i class="fa-solid fa-check" style="color:#9B2226;margin-right:5px;"></i> ' + t + '</div>';
+        };
+        var buy = soldOut
+            ? '<div style="text-align:center;padding:14px;background:#F0ECE1;border-radius:30px;color:#888;">สินค้าหมดชั่วคราว</div>'
+            : '<div style="display:flex;align-items:center;gap:15px;margin-bottom:25px;">' +
+                  '<span style="font-size:15px;color:#333;font-weight:500;">จำนวน:</span>' +
+                  '<div class="qty-box">' +
+                      '<button type="button" id="decBtn">-</button>' +
+                      '<input type="number" id="quantityInput" value="1" min="1" max="' + p.stock + '" readonly>' +
+                      '<button type="button" id="incBtn">+</button>' +
+                  '</div>' +
+                  '<span class="stock-note">' + (p.stock <= 10 ? 'เหลือ ' + p.stock + ' ชิ้น' : '') + '</span>' +
+              '</div>' +
+              '<div style="display:flex;gap:15px;">' +
+                  '<button type="button" id="addBtn" class="btn-primary" style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:30px;border:none;font-family:inherit;font-size:15px;cursor:pointer;"><i class="fa-solid fa-cart-shopping"></i> เพิ่มลงตะกร้าสินค้า</button>' +
+                  '<button type="button" id="buyBtn" class="btn-outline" style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid #9B2226;background:transparent;color:#9B2226;padding:14px;border-radius:30px;font-family:inherit;font-size:15px;cursor:pointer;"><i class="fa-solid fa-bag-shopping"></i> สั่งซื้อทันที</button>' +
+              '</div>';
+
+        box.innerHTML =
+            '<div class="detail-card">' +
+                '<div><img class="detail-img" src="' + esc(encodeURI(p.image)) + '" alt="' + esc(p.name) + '"></div>' +
+                '<div>' +
+                    (p.badge ? '<span class="hero-badge" style="margin-bottom:15px;">' + esc(p.badge) + '</span>' : '') +
+                    '<h1 style="font-size:32px;color:#2B2D42;margin-bottom:10px;">' + esc(p.name) + ' VOLCANNO</h1>' +
+                    '<div style="font-size:28px;font-weight:600;color:#9B2226;margin-bottom:20px;">' + p.price + ' บาท <span style="font-size:14px;color:#888;font-weight:400;">/ แพ็ก</span></div>' +
+                    '<p style="color:#666;font-size:15px;line-height:1.8;margin-bottom:20px;">' + esc(p.description) + '</p>' +
+                    '<div style="display:flex;flex-wrap:wrap;gap:12px 20px;margin-bottom:30px;font-size:14px;color:#555;">' +
+                        check('เนื้อปลาแท้ 100%') + check('ไม่ใส่สารกันบูด') + check('แช่แข็งคงความสด') +
+                    '</div>' + buy +
+                '</div>' +
+            '</div>';
+
+        if (soldOut) return;
+        var input = document.getElementById('quantityInput');
+        document.getElementById('incBtn').onclick = function () {
+            if (+input.value < p.stock && +input.value < 99) input.value = +input.value + 1;
+        };
+        document.getElementById('decBtn').onclick = function () {
+            if (+input.value > 1) input.value = +input.value - 1;
+        };
+        document.getElementById('addBtn').onclick = function () {
+            var r = Cart.add(p.id, +input.value, p.stock);
+            Cart.toast(r.capped
+                ? 'ใส่ได้สูงสุด ' + p.stock + ' ชิ้นตามสต็อก (ในตะกร้ามี ' + r.qty + ' ชิ้น)'
+                : 'เพิ่ม ' + p.name + ' ลงตะกร้าแล้ว', r.capped);
+        };
+        document.getElementById('buyBtn').onclick = function () {
+            Cart.add(p.id, +input.value, p.stock);
+            location.href = 'order.html';
+        };
+    }
+
+    async function load() {
+        if (!id) { message('fa-circle-question', 'ไม่ระบุสินค้า กรุณาเลือกสินค้าจากหน้าสินค้า'); return; }
+        message('fa-spinner fa-spin', 'กำลังโหลดสินค้า...');
+        try {
+            var list = await Api.getProducts();
+            var p = list.filter(function (x) { return x.id === id; })[0];
+            if (!p) { message('fa-circle-question', 'ไม่พบสินค้านี้ หรือสินค้าถูกนำออกจากการขายแล้ว'); return; }
+            render(p);
+        } catch (e) {
+            message('fa-triangle-exclamation', e.message, true);
+        }
+    }
+    load();
+})();
+</script>
+</body>
+</html>
